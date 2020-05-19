@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AnnoyingEx</string>
+    <string name="startNotificationsButton">Here we go again . . .</string>
+    <string name="stopNotificationsButton">Give closure</string>
+</resources>
