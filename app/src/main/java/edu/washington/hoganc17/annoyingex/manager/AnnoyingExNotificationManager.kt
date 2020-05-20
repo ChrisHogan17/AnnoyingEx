@@ -6,26 +6,35 @@ import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import edu.washington.hoganc17.annoyingex.MessagesFetchListener
 import edu.washington.hoganc17.annoyingex.R
+import kotlin.random.Random
 
 class AnnoyingExNotificationManager(
-    private val context: Context
+    private val context: Context,
+    private val apiManager: APIManager
 ) {
     private val notificationManagerCompat = NotificationManagerCompat.from(context)
+    var messagesFetchListener: MessagesFetchListener? = null
+
+    private lateinit var messages: List<String>
 
     init {
+        fetchMessages()
         createMessageChannel()
     }
 
     fun startNotifications() {
+        val index = Random.nextInt(0, messages.size - 1)
+
         val notification = NotificationCompat.Builder(context, MESSAGE_CHANNEL_ID)
             .setSmallIcon(R.drawable.message_icon)
             .setContentTitle("Blocked Number")
-            .setContentText("What's up?")
+            .setContentText(messages[index])
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
 
-        notificationManagerCompat.notify(10, notification)
+        notificationManagerCompat.notify(index, notification)
     }
 
     private fun createMessageChannel() {
@@ -41,6 +50,17 @@ class AnnoyingExNotificationManager(
             // Register the channel with the system
             notificationManagerCompat.createNotificationChannel(channel)
         }
+    }
+
+    private fun fetchMessages(){
+        apiManager.fetchMessages(
+            { messages ->
+                messagesFetchListener?.onMessagesFetched(messages)
+                this.messages = messages
+            }, {
+                messagesFetchListener?.onFetchError()
+            }
+        )
     }
 
     companion object {

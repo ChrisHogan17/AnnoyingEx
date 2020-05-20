@@ -2,4 +2,6 @@
     <string name="app_name">AnnoyingEx</string>
     <string name="startNotificationsButton">Here we go again . . .</string>
     <string name="stopNotificationsButton">Give closure</string>
+    <string name="loading_message">Loading messages</string>
+    <string name="errorRetrievingMessages">Error retrieving messages</string>
 </resources>
