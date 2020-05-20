@@ -15,6 +15,7 @@ class TimedMessageManager(context: Context) {
                 .build()
 
             val workRequest = PeriodicWorkRequestBuilder<MessageWorker>(20, TimeUnit.MINUTES)
+                .setInitialDelay(5, TimeUnit.SECONDS)
                 .setConstraints(constraints)
                 .addTag(WORKER_TAG)
                 .build()
