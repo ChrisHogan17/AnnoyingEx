@@ -19,8 +19,14 @@ class MainActivity : AppCompatActivity(),
         val notificationManager = (application as AnnoyingExApp).annoyingExNotificationManager
         notificationManager.messagesFetchListener = this
 
+        val timedMessageManager = (application as AnnoyingExApp).timedMessageManager
+
         btnStartNotifications.setOnClickListener {
-            notificationManager.sendRandomMessageNotification()
+            timedMessageManager.startMessages()
+        }
+
+        btnStopNotifications.setOnClickListener {
+            timedMessageManager.stopMessages()
         }
     }
 

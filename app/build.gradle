@@ -23,6 +23,14 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 }
 
 dependencies {
@@ -40,4 +48,8 @@ dependencies {
 
     // Volley
     implementation 'com.android.volley:volley:1.1.1'
+
+    // WorkManager
+    implementation "androidx.work:work-runtime-ktx:2.3.4"
+
 }
