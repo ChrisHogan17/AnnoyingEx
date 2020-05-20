@@ -27,7 +27,7 @@ class AnnoyingExNotificationManager(
         createMessageChannel()
     }
 
-    fun startNotifications() {
+    fun sendRandomMessageNotification() {
         val index = Random.nextInt(0, messages.size - 1)
 
         val messageIntent = Intent(context, MessageActivity::class.java).apply {

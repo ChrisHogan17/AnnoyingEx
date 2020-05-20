@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(),
         notificationManager.messagesFetchListener = this
 
         btnStartNotifications.setOnClickListener {
-            notificationManager.startNotifications()
+            notificationManager.sendRandomMessageNotification()
         }
     }
 
