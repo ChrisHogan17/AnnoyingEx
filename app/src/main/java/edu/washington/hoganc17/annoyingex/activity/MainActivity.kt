@@ -1,12 +1,16 @@
-package edu.washington.hoganc17.annoyingex
+package edu.washington.hoganc17.annoyingex.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import edu.washington.hoganc17.annoyingex.AnnoyingExApp
+import edu.washington.hoganc17.annoyingex.model.MessagesFetchListener
+import edu.washington.hoganc17.annoyingex.R
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), MessagesFetchListener {
+class MainActivity : AppCompatActivity(),
+    MessagesFetchListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
