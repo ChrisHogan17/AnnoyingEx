@@ -11,7 +11,7 @@ class TimedMessageManager(context: Context) {
     fun startMessages() {
         if(!isMessageWorkerRunning()) {
             val constraints = Constraints.Builder()
-                //.setRequiresCharging(true)
+                .setRequiresCharging(true)
                 .build()
 
             val workRequest = PeriodicWorkRequestBuilder<MessageWorker>(20, TimeUnit.MINUTES)
