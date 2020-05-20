@@ -20,7 +20,7 @@ class AnnoyingExNotificationManager(
     private val notificationManagerCompat = NotificationManagerCompat.from(context)
     var messagesFetchListener: MessagesFetchListener? = null
 
-    private lateinit var messages: List<String>
+    private var messages: List<String>? = null
 
     init {
         fetchMessages()
@@ -28,11 +28,46 @@ class AnnoyingExNotificationManager(
     }
 
     fun sendRandomMessageNotification() {
-        val index = Random.nextInt(0, messages.size - 1)
+        messages?.let { messages ->
+            if (messages.isEmpty()) {
+                sendNoMessageNotification()
+                return
+            }
+            val index = Random.nextInt(0, messages.size - 1)
+
+            val messageIntent = Intent(context, MessageActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                putExtra(MESSAGE_KEY, messages[index])
+            }
+
+            val pendingMessageIntent = PendingIntent.getActivity(
+                context,
+                0,
+                messageIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+
+            val notification = NotificationCompat.Builder(context, MESSAGE_CHANNEL_ID)
+                .setSmallIcon(R.drawable.message_icon)
+                .setContentTitle("Blocked Number")
+                .setContentText(messages[index])
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingMessageIntent)
+                .setAutoCancel(true)
+                .build()
+
+            notificationManagerCompat.notify(index, notification)
+        }  ?: run {
+            sendNoMessageNotification()
+        }
+    }
+
+    private fun sendNoMessageNotification() {
+        val notificationText = "Unable to retrieve message"
 
         val messageIntent = Intent(context, MessageActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra(MESSAGE_KEY, messages[index])
+            putExtra(MESSAGE_KEY, notificationText)
         }
 
         val pendingMessageIntent = PendingIntent.getActivity(
@@ -45,13 +80,13 @@ class AnnoyingExNotificationManager(
         val notification = NotificationCompat.Builder(context, MESSAGE_CHANNEL_ID)
             .setSmallIcon(R.drawable.message_icon)
             .setContentTitle("Blocked Number")
-            .setContentText(messages[index])
+            .setContentText(notificationText)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingMessageIntent)
             .setAutoCancel(true)
             .build()
 
-        notificationManagerCompat.notify(index, notification)
+        notificationManagerCompat.notify(0, notification)
     }
 
     private fun createMessageChannel() {
