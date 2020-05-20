@@ -11,7 +11,7 @@ class TimedMessageManager(context: Context) {
     fun startMessages() {
         if(!isMessageWorkerRunning()) {
             val constraints = Constraints.Builder()
-                .setRequiresCharging(true)
+                //.setRequiresCharging(true)
                 .build()
 
             val workRequest = PeriodicWorkRequestBuilder<MessageWorker>(20, TimeUnit.MINUTES)
@@ -24,11 +24,12 @@ class TimedMessageManager(context: Context) {
     }
 
     private fun isMessageWorkerRunning(): Boolean {
-        return when (workManager.getWorkInfosByTag(WORKER_TAG).get().firstOrNull()?.state) {
-            WorkInfo.State.RUNNING,
-            WorkInfo.State.ENQUEUED -> true
-            else -> false
+        workManager.getWorkInfosByTag(WORKER_TAG).get().forEach { workInfo ->
+           if (workInfo.state === WorkInfo.State.ENQUEUED || workInfo.state === WorkInfo.State.RUNNING) {
+               return true
+           }
         }
+        return false
     }
 
     fun stopMessages() {
